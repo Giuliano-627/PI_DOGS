@@ -103,10 +103,40 @@ router.get("/dogs/:idRaza", async (req, res) => {
   console.log("Listo, buscando el ID que haga match");
   const dog = allDogs.find((elem) => elem.id === idRaza);
   console.log("DOG:", dog);
-   if (dog){ 
-    res.status(200).json(dog) 
-} else{
-    res.status(404).send("id sin match");    
-}
+  if (dog) {
+    res.status(200).json(dog);
+  } else {
+    res.status(404).send("id sin match");
+  }
+});
+
+router.post("/dog", async (req, res) => {
+  let {
+    name,
+    min_height,
+    max_height,
+    min_weight,
+    max_weight,
+    life_span,
+    temperaments,
+    image,
+    createdInDB
+  } = req.body;
+  let dogCreated = await Dog.create({
+    name,
+    min_height,
+    max_height,
+    min_weight,
+    max_weight,
+    life_span,
+    temperaments,
+    image,
+    createdInDB : true,
+  });
+  let tempDB = await Temp.findAll({
+    where: { name: temperaments},
+  })
+  dogCreated.addTemp(tempDB());
+  res.send("Doggy creado con exito")
 });
 module.exports = router;
