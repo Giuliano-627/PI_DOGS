@@ -1,15 +1,19 @@
 const initialState = {
-    dogs : []
-}
+  dogs: [],
+  temperaments: [],
+};
 
-function rootReducer(state= initialState,action){
-    switch(action.type){
-        case "GET_Dogs":
-            return{
-                ...state,
-                dogs: action.payload
-            }
-    }
+function rootReducer(state = initialState, action) {
+  switch (action.type) {
+    case "GET_Dogs":
+      return {
+        ...state,
+        dogs: action.payload,
+        temperaments: action.temperaments,
+      };
+    default:
+      return state;
+  }
 }
 
 export default rootReducer;

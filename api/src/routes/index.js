@@ -25,9 +25,11 @@ const getApiInfo = async () => {
     const weightMax = parseInt(weight[1]);
     console.log("Peso max:", weightMax);
     console.log("Peso min:", weightMin);
+    console.log("URL del doggy:", elem.image.url)
     const default_Temp = elem.temperament
       ? `${elem.temperament}`
       : "Active, Agile, Confident, Fearless";
+    console.log("Temperamentos:",default_Temp)
     return {
       id: `${elem.id}`,
       name: elem.name,
@@ -37,7 +39,7 @@ const getApiInfo = async () => {
       weightMin: weightMin,
       temperament: default_Temp,
       lifeSpan: elem.life_span,
-      img: elem.image.url,
+      image: elem.image.url,
     };
   });
   return apiInfo;
@@ -83,6 +85,7 @@ router.get("/temperament", async (req, res) => {
   console.log("temperamentos mapeados, arreglando strings");
   const temps = temperaments.toString().split(",");
   console.log("strings arreglados, llevando temperamentos a data base");
+  console.log("TEMPS:",temps)
   temps.forEach((el) => {
     console.log("i:", el);
     let i = el.trim();
