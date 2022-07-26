@@ -15,7 +15,7 @@ export default function Home() {
   const allTemps = auxTemps.filter(e=>e.name!=="")
   console.log("AllTemps:", allTemps);
   const [currentPag, setCurrPag] = useState(1);
-  const [dogsPorPag, setDogsPorPag] = useState(6);
+  const [dogsPorPag, setDogsPorPag] = useState(12);
   const indexOfLastDog = currentPag * dogsPorPag;
   const indexOfFirtsDog = indexOfLastDog - dogsPorPag;
   const currentDogs = allDogs.slice(indexOfFirtsDog, indexOfLastDog);
@@ -67,7 +67,7 @@ export default function Home() {
           <option value="createdApi">Proveniente de la API</option>
           <option value="createdDb">Proveniente de la DB</option>
         </select>
-        <Paginado
+        <Paginado 
           dogsPorPag={dogsPorPag}
           allDogs={allDogs.length}
           paginado={paginado}
