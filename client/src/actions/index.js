@@ -11,3 +11,24 @@ export function getDoggys() {
     });
   };
 }
+
+export function filterDogsByTemp(payload){
+  return{
+    type: "FILTER_BY_TEMPERAMENTS",
+    payload
+  }
+}
+
+export function filterCreated(payload){
+  return {
+    type: "FILTER_CREATED",
+    payload
+  }
+}
+
+export function orderByName(payload){
+  return {
+    type: "FILTER_BY_AtoZ",
+    payload
+  }
+}

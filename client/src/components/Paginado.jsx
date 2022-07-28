@@ -12,10 +12,7 @@ export default function Paginado({ dogsPorPag, allDogs, paginado, key }) {
     <nav>
       <ul>
         {console.log("entrando al map del paginado")}
-        {pageNumbers.map((number) => {
-          {
-            console.log("listando la pagina", number);
-          }
+        {pageNumbers.map((number) => (
           <li className="paginado" key={number}>
             <a
               onClick={() => {
@@ -24,10 +21,9 @@ export default function Paginado({ dogsPorPag, allDogs, paginado, key }) {
               }}
             >
               {number}
-              <h1>.</h1>
             </a>
-          </li>;
-        })}
+          </li>
+        ))}
       </ul>
     </nav>
   );

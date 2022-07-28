@@ -10,26 +10,26 @@ const axios = require("axios");
 const url =
   "https://api.thedogapi.com/v1/breeds?api_key={3abcd05c-2135-45d0-b3b9-2c2ca21335e9}";
 const getApiInfo = async () => {
-  console.log("trayendo info de la api");
+  //console.log("trayendo info de la api");
   const apiUrl = await axios.get(url);
-  console.log("url lista");
+  //console.log("url lista");
   const apiInfo = await apiUrl.data.map((elem) => {
-    console.log("mapeando elementos");
+    //console.log("mapeando elementos");
     const height = elem.height.metric.split("-");
     const weight = elem.weight.metric.split("-");
     const heightMin = parseInt(height[0].trim());
     const heightMax = parseInt(height[1]);
-    console.log("Alto max:", heightMax);
-    console.log("Alto min:", heightMin);
+    //console.log("Alto max:", heightMax);
+    //console.log("Alto min:", heightMin);
     const weightMin = parseInt(weight[0].trim());
     const weightMax = parseInt(weight[1]);
-    console.log("Peso max:", weightMax);
-    console.log("Peso min:", weightMin);
-    console.log("URL del doggy:", elem.image.url)
+    //console.log("Peso max:", weightMax);
+    //console.log("Peso min:", weightMin);
+    //console.log("URL del doggy:", elem.image.url)
     const default_Temp = elem.temperament
       ? `${elem.temperament}`
       : "Active, Agile, Confident, Fearless";
-    console.log("Temperamentos:",default_Temp)
+    //console.log("Temperamentos:",default_Temp)
     return {
       id: `${elem.id}`,
       name: elem.name,
@@ -50,13 +50,13 @@ const getDbInfo = async () => {
 };
 
 const getAllDogs = async () => {
-  console.log("trayendo apiInfo");
+  //console.log("trayendo apiInfo");
   const apiInfo = await getApiInfo();
-  console.log("getApiInfo ok, trayendo DB info.");
+  //console.log("getApiInfo ok, trayendo DB info.");
   const dbInfo = await getDbInfo();
-  console.log("get db info listo. concatenando");
+  //console.log("get db info listo. concatenando");
   const totalInfo = apiInfo.concat(dbInfo);
-  totalInfo ? console.log("concatenado ok") : console.log("Concatenado NOT OK");
+  //totalInfo ? //console.log("concatenado ok") : //console.log("Concatenado NOT OK");
   return totalInfo;
 };
 
@@ -64,7 +64,7 @@ router.get("/dogs", async (req, res) => {
   const name = req.query.name;
   let totalDogs = await getAllDogs();
   if (name) {
-    console.log("hay name por query");
+    //console.log("hay name por query");
     let dogName = await totalDogs.filter((elem) =>
       elem.name.toLowerCase().includes(name.toLowerCase())
     );
@@ -72,40 +72,40 @@ router.get("/dogs", async (req, res) => {
       ? res.status(200).send(dogName)
       : res.status(404).send("no existe ese doggy");
   } else {
-    console.log("NO hay name por query");
+    //console.log("NO hay name por query");
     res.status(200).send(totalDogs);
   }
 });
 
 router.get("/temperament", async (req, res) => {
-  console.log("traemos los temperamentos desde la api");
+  //console.log("traemos los temperamentos desde la api");
   const temperamentsApi = await axios.get(url);
-  console.log("listo, mapeamos los temperamentos");
+  //console.log("listo, mapeamos los temperamentos");
   const temperaments = temperamentsApi.data.map((t) => t.temperament);
-  console.log("temperamentos mapeados, arreglando strings");
+  //console.log("temperamentos mapeados, arreglando strings");
   const temps = temperaments.toString().split(",");
-  console.log("strings arreglados, llevando temperamentos a data base");
-  console.log("TEMPS:",temps)
+  //console.log("strings arreglados, llevando temperamentos a data base");
+  //console.log("TEMPS:",temps)
   temps.forEach((el) => {
-    console.log("i:", el);
+    //console.log("i:", el);
     let i = el.trim();
-    console.log("trimeado:", i);
+    //console.log("trimeado:", i);
     Temp.findOrCreate({
       where: { name: i },
     });
   });
-  console.log("temperamentos en db listo");
+  //console.log("temperamentos en db listo");
   const allTemp = await Temp.findAll();
   res.send(allTemp);
 });
 
 router.get("/dogs/:idRaza", async (req, res) => {
   const { idRaza } = req.params;
-  console.log("Trayendo dogs para ID SEARCH");
+  //console.log("Trayendo dogs para ID SEARCH");
   const allDogs = await getAllDogs();
-  console.log("Listo, buscando el ID que haga match");
+  //console.log("Listo, buscando el ID que haga match");
   const dog = allDogs.find((elem) => elem.id === idRaza);
-  console.log("DOG:", dog);
+  //console.log("DOG:", dog);
   if (dog) {
     res.status(200).json(dog);
   } else {
