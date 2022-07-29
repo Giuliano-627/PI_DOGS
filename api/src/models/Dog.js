@@ -30,7 +30,7 @@ module.exports = (sequelize) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    lifeSpan: {
+    life_span: {
       type: DataTypes.STRING,
       allowNull: true,
     },
@@ -41,5 +41,9 @@ module.exports = (sequelize) => {
     image: {
       type: DataTypes.STRING(100000)
     }
-  });
+  },
+  {
+    timestamps: false /* le saca el createAt y Updateat*/,
+    freezeTableName: true
+  },);
 };
