@@ -14,28 +14,26 @@ function rootReducer(state = initialState, action) {
         temperaments: action.temperaments,
       };
     case "FILTER_BY_TEMPERAMENTS":
-      const allDoggys = state.allDogs;
-      const perrosFiltrados =
-        action.payload === "TEMPERAMENTOS"
-          ? allDoggys
-          : allDoggys.filter((el) => el.temperament.includes(action.payload));
+      const perrosFiltrados = state.allDogs.filter((e) => {
+        if (action.payload === "TEMPERAMENTOS") {
+          return state.allDogs;
+        } else if (e.temperament && e.temperament.includes(action.payload))
+          return e;
+      });
       return {
         ...state,
         dogs: perrosFiltrados,
       };
     case "FILTER_CREATED": {
-      const allDoggys = state.allDogs
       let createdFilter;
-      if(action.payload === "all"){
-        createdFilter =  state.allDogs
-      } 
-      else{
-        createdFilter = action.payload === "fromApi" ? state.allDogs.filter(el => !el.createdInDB) : state.allDogs.filter(el => el.createdInDB) 
-      }
-      return{
+      createdFilter =
+        action.payload === "fromApi"
+          ? state.allDogs.filter((el) => !el.createdInDB)
+          : state.allDogs.filter((el) => el.createdInDB);
+      return {
         ...state,
-        dogs: createdFilter
-      } 
+        dogs: createdFilter,
+      };
     }
     case "FILTER_BY_AtoZ":
       let order;
@@ -53,10 +51,63 @@ function rootReducer(state = initialState, action) {
           return 0;
         });
       }
-
       return {
         ...state,
         dogs: order,
+      };
+    case "FILTER_BY_Weight":
+      let doggys = state.allDogs;
+      //console.log("action.payload:",action.payload) --> pAsc o pDsc respectivamente
+      switch (action.payload) {
+        case "pMinAsc":
+          doggys = state.allDogs.sort((a, b) => {
+            if (a.weightMin < b.weightMin) return -1;
+            if (b.weightMin < a.weightMin) return 1;
+            return 0;
+          });
+          break;
+        case "pMinDesc":
+          doggys = state.allDogs.sort((a, b) => {
+            if (a.weightMin > b.weightMin) return -1;
+            if (b.weightMin > a.weightMin) return 1;
+            return 0;
+          });
+          break;
+        case "pMaxAsc":
+          doggys = state.allDogs.sort((a, b) => {
+            if (a.weightMax < b.weightMax) return -1;
+            if (b.weightMax < a.weightMax) return 1;
+            return 0;
+          });
+          break;
+        case "pMaxDesc":
+          doggys = state.allDogs.sort((a, b) => {
+            if (a.weightMax > b.weightMax) return -1;
+            if (b.weightMax > a.weightMax) return 1;
+            return 0;
+          });
+          break;
+        default:
+          doggys = state.allDogs;
+          break;
+      }
+      return {
+        ...state,
+        dogs: doggys,
+      };
+    case "GET_DOGS_NAME":
+      return {
+        ...state,
+        dogs: action.payload,
+      };
+    case "GET_TEMPERAMENTS":
+      return {
+        ...state,
+        temperaments: action.payload,
+      };
+    case "POST_NEW_DOG":
+      return {
+        ...state,
       };
     default:
       return state;

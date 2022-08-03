@@ -40,8 +40,8 @@ const getDbInfo = async () => {
   return await Dog.findAll({
     include: {
       model: Temp,
-      attributes: ["name"] /* solamente trae name */,
-      throught: { dogTemp: [] } /*  y lo devuelve en forma de arreglo */,
+      attributes: ["name"] ,
+      throught: { dogTemp: [] }
     },
   });
 };
@@ -49,7 +49,6 @@ const getDbInfo = async () => {
 const getAllDogs = async () => {
   const apiInfo = await getApiInfo();
   const dbInfo = await getDbInfo();
-  console.log("DB INFO:", dbInfo);
   const totalInfo = apiInfo.concat(dbInfo);
   return totalInfo;
 };
@@ -94,7 +93,6 @@ router.get("/dogs/:idRaza", async (req, res) => {
   }
 });
 router.post("/dogs", async (req, res) => {
-  console.log("Posteando un perro");
   const {
     name,
     heightMax,
@@ -106,7 +104,6 @@ router.post("/dogs", async (req, res) => {
     createdInDB,
     image,
   } = req.body;
-  console.log("PERRO NUEVO:", req.body);
   try {
     let NewDog = await Dog.create({
       name,
@@ -124,7 +121,6 @@ router.post("/dogs", async (req, res) => {
     let temperamentNewDog = await Temp.findAll({
       where: { name: temperament },
     });
-    console.log("nuevo temperamento:", temperamentNewDog);
     NewDog.addTemp(temperamentNewDog);
     res.send("Tu nueva raza se agrego con exito");
   } catch (error) {

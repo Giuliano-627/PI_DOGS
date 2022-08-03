@@ -1,6 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
-export default function Card({ name, image, weight, temp, id }) {
+
+const verif = (created, temperamento)=>{
+  if(created){
+    
+    return temperamento
+  }
+  else{
+    return temperamento
+  }
+}
+
+export default function Card({ name, image, weight, temp, id, createdInDB }) {
   return (
     <div key={id}>
       <Link to={"/home/" + id}>
@@ -13,7 +24,7 @@ export default function Card({ name, image, weight, temp, id }) {
       </Link>
       <h3>{name}</h3>
       <h5>Peso: {weight}</h5>
-      <h5>Temperamento: {temp}</h5>
+      <h5>Temperamentos:{temp}</h5>
       <h6>Click en la img para mas informacion</h6>
     </div>
   );

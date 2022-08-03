@@ -8,15 +8,14 @@ import Paginado from "./Paginado";
 import { filterDogsByTemp } from "../actions/index";
 import { orderByName } from "../actions/index";
 import { filterCreated } from "../actions/index";
+import { orderByWeight } from "../actions/index";
+import SearchBar from "./SearchBar";
 
 export default function Home() {
-  console.log("Se entro a home");
   const dispatch = useDispatch();
   const allDogs = useSelector((state) => state.dogs);
   const auxTemps = useSelector((state) => state.temperaments);
-  console.log("ALLDOGS:", allDogs);
   const allTemps = auxTemps.filter((e) => e.name !== "");
-  console.log("AllTemps:", allTemps);
   const [currentPag, setCurrPag] = useState(1);
   const [dogsPorPag, setDogsPorPag] = useState(12);
   const indexOfLastDog = currentPag * dogsPorPag;
@@ -32,11 +31,8 @@ export default function Home() {
     dispatch(getDoggys());
   }, [dispatch]);
   function handleClick(e) {
-    console.log("a punto de traer los doggys desde la api");
     e.preventDefault();
-    console.log("Trayendo doggys desde la api");
     dispatch(getDoggys());
-    console.log("doggys traidos de la api y despachados");
   }
   function handleFilterTemperament(e) {
     e.preventDefault();
@@ -44,22 +40,29 @@ export default function Home() {
     setCurrPag(1);
     setOrder(e.target.value);
   }
-  function handleFilterCreated(e){
+  function handleFilterCreated(e) {
     e.preventDefault();
+    //dispatch(getDoggys());
     dispatch(filterCreated(e.target.value));
     setCurrPag(1);
-    setOrder(e.target.value)
+    setOrder(e.target.value);
   }
-  function handleOrderByName(e){
+  function handleOrderByName(e) {
     e.preventDefault();
     dispatch(orderByName(e.target.value));
     setCurrPag(1);
-    setOrder(e.target.value)
+    setOrder(e.target.value);
   }
-  console.log("Entrando al return");
+  function handleOrderByWeight(e) {
+    e.preventDefault();
+    dispatch(orderByWeight(e.target.value));
+    setCurrPag(1);
+    setOrder(e.target.value);
+  }
+
   return (
     <div>
-      <Link to="/dogs">Crear doggy</Link>
+      <Link to="/createDog">Crear doggy</Link>
       <h1>Titulo de la pagina</h1>
       <button
         onClick={(e) => {
@@ -69,9 +72,12 @@ export default function Home() {
         Recargar todos los perros
       </button>
       <div>
-        <select>
-          <option value="pAsc">Peso Ascendente</option>
-          <option value="pDesc">Peso Descendente</option>
+      <select onChange={(e) => handleOrderByWeight(e)}>
+          <option value="pUnordered">Ordenar por peso</option>
+          <option value="pMinAsc">Peso Minimo Ascendente</option>
+          <option value="pMinDesc">Peso Minimo Descendente</option>
+          <option value="pMaxAsc">Peso Maximo Ascendente</option>
+          <option value="pMaxDesc">Peso Maximo Descendente</option>
         </select>
         <select onChange={(e) => handleOrderByName(e)}>
           <option value={"ASCENDENT"}>A to Z</option>
@@ -86,7 +92,6 @@ export default function Home() {
           ))}
         </select>
         <select onChange={(e) => handleFilterCreated(e)}>
-          <option value="all" >API Y DATABASE</option>
           <option value="fromApi">Proveniente de la API</option>
           <option value="fromDB">Proveniente de la DB</option>
         </select>
@@ -95,6 +100,7 @@ export default function Home() {
           allDogs={allDogs.length}
           paginado={paginado}
         />
+        <SearchBar/>
         {currentDogs.map((el) => {
           return (
             <Fragment>
@@ -105,6 +111,7 @@ export default function Home() {
                 temp={el.temperament}
                 id={el.id}
                 key={el.id}
+                createdInDB={el.createdInDB}
               />
             </Fragment>
           );
